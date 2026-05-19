@@ -3,6 +3,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT_DIR / "data"
 MODELS_DIR = ROOT_DIR / "models"
+REPORTS_DIR = ROOT_DIR / "reports"
 
 KAGGLE_DATASET = "shubhambathwal/flight-price-prediction"
 RAW_CSV = DATA_DIR / "Clean_Dataset.csv"

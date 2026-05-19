@@ -46,6 +46,42 @@ with st.sidebar:
     st.metric("MAE", f"{metrics['mae']:,.0f}")
     st.caption(f"Trained on {metadata['n_train_rows']:,} rows.")
 
+    best_model = metadata.get("best_model")
+    if best_model:
+        st.caption(f"Best model: **{best_model}** (selected via {metadata.get('cv_folds', 5)}-fold CV).")
+
+    comparison = metadata.get("model_comparison")
+    if comparison:
+        with st.expander("Model comparison"):
+            st.dataframe(
+                pd.DataFrame(comparison)[
+                    ["name", "cv_rmse_mean", "cv_rmse_std", "test_rmse", "test_mae", "test_r2"]
+                ].rename(
+                    columns={
+                        "name": "Model",
+                        "cv_rmse_mean": "CV RMSE",
+                        "cv_rmse_std": "CV RMSE std",
+                        "test_rmse": "Test RMSE",
+                        "test_mae": "Test MAE",
+                        "test_r2": "Test R²",
+                    }
+                ).style.format(
+                    {
+                        "CV RMSE": "{:,.0f}",
+                        "CV RMSE std": "{:,.0f}",
+                        "Test RMSE": "{:,.0f}",
+                        "Test MAE": "{:,.0f}",
+                        "Test R²": "{:.4f}",
+                    }
+                ),
+                hide_index=True,
+            )
+
+    tuning = metadata.get("tuning")
+    if tuning and tuning.get("best_params"):
+        with st.expander("Best hyperparameters"):
+            st.json(tuning["best_params"])
+
 with st.form("predict"):
     col1, col2 = st.columns(2)
     with col1:
